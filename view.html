@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ваше персональне відео</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #111;
+      --fg: #f5f5f5;
+      --accent: #2ecc71;
+      --muted: #aaa;
+      --card: #1c1c1c;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      display: flex;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      box-shadow: 0 6px 30px rgba(0,0,0,0.4);
+      max-width: 800px;
+      width: 100%;
+      padding: 2rem;
+      text-align: center;
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo-wrapper {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 1.5rem;
+    }
+
+    img.logo {
+      max-height: 60px;
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 2.2rem;
+    }
+
+    p.position {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      color: var(--muted);
+    }
+
+    iframe {
+      width: 100%;
+      max-width: 720px;
+      height: 405px;
+      border-radius: 12px;
+      border: 1px solid #333;
+      background: #000;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .ai-note {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    @media (max-width: 768px) {
+      iframe {
+        height: 220px;
+      }
+      h1 { font-size: 1.6rem; }
+      p.position { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo-wrapper">
+      <img src="https://zagoriy.foundation/wp-content/themes/zagoriy_foundation/images/logo-white-new.png" alt="Zagoriy Foundation" class="logo" />
+    </div>
+    <h1 id="greeting">Привіт!</h1>
+    <p class="position" id="position-line"></p>
+    <iframe id="player" allowfullscreen></iframe>
+    <p class="ai-note">⚠️ Це відео згенероване штучним інтелектом</p>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const name = decodeURIComponent(params.get("name") || "");
+    const position = decodeURIComponent(params.get("position") || "");
+    const rawVideo = decodeURIComponent(params.get("video") || "");
+
+    document.getElementById("greeting").textContent = name ? `Привіт, ${name}!` : "Привіт!";
+    document.getElementById("position-line").textContent = position ? `Позиція: ${position}` : "";
+
+    let embedUrl = rawVideo;
+    if (rawVideo.includes("app.heygen.com/videos/")) {
+      const videoId = rawVideo.split("/").pop();
+      embedUrl = `https://app.heygen.com/embeds/${videoId}`;
+    }
+
+    document.getElementById("player").src = embedUrl;
+  </script>
+</body>
+</html>
